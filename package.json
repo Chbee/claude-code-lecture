@@ -1,0 +1,16 @@
+{
+  "name": "claude-code-lecture",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "progress": "npx tsx scripts/progress-checker.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^3.2.1",
+    "tsx": "^4.19.0"
+  }
+}

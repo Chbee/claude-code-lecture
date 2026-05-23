@@ -1,0 +1,13 @@
+{
+  "expectations": [
+    {"text": "user-service.test.ts 파일이 생성되었다", "passed": true, "evidence": "user-service.test.ts 파일이 outputs 디렉토리에 생성됨"},
+    {"text": "UserRepository가 mock 객체로 처리되어 있다", "passed": true, "evidence": "createMockRepo() 헬퍼로 vi.fn() mock 생성"},
+    {"text": "getUserById 메서드에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('getUserById') 블록에 2개 테스트"},
+    {"text": "updateEmail 메서드에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('updateEmail') 블록에 5개 테스트"},
+    {"text": "deleteUser 메서드에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('deleteUser') 블록에 5개 테스트"},
+    {"text": "최소 1개의 에러 throw 케이스를 테스트한다", "passed": true, "evidence": "다수의 rejects.toThrow 케이스 존재"},
+    {"text": "Vitest API(vi.fn 등)를 사용한다", "passed": true, "evidence": "import { vi } from 'vitest', vi.fn() 사용"},
+    {"text": "불필요한 주석이 없거나 최소화되어 있다", "passed": false, "evidence": "'// ---------- getUserById ----------', '// ---------- updateEmail ----------', '// ---------- deleteUser ----------' 섹션 구분 주석 3개, 그리고 line 169-172에 구현 세부사항 설명 주석 존재"}
+  ],
+  "summary": {"passed": 7, "failed": 1, "total": 8, "pass_rate": 0.875}
+}

@@ -1,0 +1,193 @@
+{
+  "metadata": {
+    "skill_name": "unit-test",
+    "skill_path": "/Users/jiyoung/Projects/2. Personal/claude-code-lecture/.claude/skills/unit-test",
+    "executor_model": "claude-opus-4-6",
+    "analyzer_model": "claude-opus-4-6",
+    "timestamp": "2026-05-23T12:56:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "cart-functions",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 8,
+        "failed": 0,
+        "total": 8,
+        "time_seconds": 155.6,
+        "tokens": 14305,
+        "tool_calls": 4,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "cart.test.ts 파일이 생성되었다", "passed": true, "evidence": "cart.test.ts 파일이 outputs 디렉토리에 생성됨"},
+        {"text": "calculateTotal 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('calculateTotal') 블록에 2개 테스트"},
+        {"text": "applyCoupon 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('applyCoupon') 블록에 5개 테스트"},
+        {"text": "getCartSummary 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('getCartSummary') 블록에 3개 테스트"},
+        {"text": "정상 동작(happy path) 테스트가 최소 3개 있다", "passed": true, "evidence": "6개의 happy path"},
+        {"text": "edge case 테스트가 3개를 초과하지 않는다", "passed": true, "evidence": "edge case 3개"},
+        {"text": "불필요한 주석이 없거나 최소화되어 있다", "passed": true, "evidence": "주석 없음"},
+        {"text": "Jest의 describe/it 또는 test 문법을 사용한다", "passed": true, "evidence": "describe/it 패턴 사용"}
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "cart-functions",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 6,
+        "failed": 2,
+        "total": 8,
+        "time_seconds": 44.1,
+        "tokens": 13424,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "cart.test.ts 파일이 생성되었다", "passed": true, "evidence": "파일 생성됨"},
+        {"text": "calculateTotal 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "7개 테스트"},
+        {"text": "applyCoupon 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "13개 테스트"},
+        {"text": "getCartSummary 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "7개 테스트"},
+        {"text": "정상 동작(happy path) 테스트가 최소 3개 있다", "passed": true, "evidence": "다수의 happy path"},
+        {"text": "edge case 테스트가 3개를 초과하지 않는다", "passed": false, "evidence": "12개 이상의 edge case"},
+        {"text": "불필요한 주석이 없거나 최소화되어 있다", "passed": false, "evidence": "계산 주석 존재"},
+        {"text": "Jest의 describe/it 또는 test 문법을 사용한다", "passed": true, "evidence": "describe/it 사용"}
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "user-service-class",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 8,
+        "failed": 0,
+        "total": 8,
+        "time_seconds": 162.2,
+        "tokens": 14747,
+        "tool_calls": 4,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "user-service.test.ts 파일이 생성되었다", "passed": true, "evidence": "파일 생성됨"},
+        {"text": "UserRepository가 mock 객체로 처리되어 있다", "passed": true, "evidence": "vi.fn()으로 mock 처리"},
+        {"text": "getUserById 메서드에 대한 테스트가 존재한다", "passed": true, "evidence": "2개 테스트"},
+        {"text": "updateEmail 메서드에 대한 테스트가 존재한다", "passed": true, "evidence": "5개 테스트"},
+        {"text": "deleteUser 메서드에 대한 테스트가 존재한다", "passed": true, "evidence": "3개 테스트"},
+        {"text": "최소 1개의 에러 throw 케이스를 테스트한다", "passed": true, "evidence": "다수의 rejects.toThrow"},
+        {"text": "Vitest API(vi.fn 등)를 사용한다", "passed": true, "evidence": "vi.fn(), mockResolvedValue 사용"},
+        {"text": "불필요한 주석이 없거나 최소화되어 있다", "passed": true, "evidence": "주석 없음"}
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "user-service-class",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.875,
+        "passed": 7,
+        "failed": 1,
+        "total": 8,
+        "time_seconds": 38.9,
+        "tokens": 12714,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "user-service.test.ts 파일이 생성되었다", "passed": true, "evidence": "파일 생성됨"},
+        {"text": "UserRepository가 mock 객체로 처리되어 있다", "passed": true, "evidence": "createMockRepo()로 mock 생성"},
+        {"text": "getUserById 메서드에 대한 테스트가 존재한다", "passed": true, "evidence": "2개 테스트"},
+        {"text": "updateEmail 메서드에 대한 테스트가 존재한다", "passed": true, "evidence": "5개 테스트"},
+        {"text": "deleteUser 메서드에 대한 테스트가 존재한다", "passed": true, "evidence": "5개 테스트"},
+        {"text": "최소 1개의 에러 throw 케이스를 테스트한다", "passed": true, "evidence": "다수의 rejects.toThrow"},
+        {"text": "Vitest API(vi.fn 등)를 사용한다", "passed": true, "evidence": "vi.fn() 사용"},
+        {"text": "불필요한 주석이 없거나 최소화되어 있다", "passed": false, "evidence": "섹션 구분 주석 3개, 구현 세부사항 설명 주석 존재"}
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "string-utils-functions",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 8,
+        "failed": 0,
+        "total": 8,
+        "time_seconds": 279.5,
+        "tokens": 14492,
+        "tool_calls": 6,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "string-utils.test.ts 파일이 생성되었다", "passed": true, "evidence": "파일 생성됨"},
+        {"text": "slugify 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "5개 테스트"},
+        {"text": "truncate 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "4개 테스트"},
+        {"text": "parseQueryString 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "6개 테스트"},
+        {"text": "각 함수에 최소 1개의 happy path 테스트가 있다", "passed": true, "evidence": "각 함수에 happy path 존재"},
+        {"text": "edge case 테스트가 3개를 초과하지 않는다", "passed": true, "evidence": "적절한 수의 edge case"},
+        {"text": "테스트 코드 전체가 100줄 이내이다", "passed": true, "evidence": "80줄"},
+        {"text": "불필요한 주석이 없거나 최소화되어 있다", "passed": true, "evidence": "주석 없음"}
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "string-utils-functions",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.625,
+        "passed": 5,
+        "failed": 3,
+        "total": 8,
+        "time_seconds": 42.0,
+        "tokens": 12611,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "string-utils.test.ts 파일이 생성되었다", "passed": true, "evidence": "파일 생성됨"},
+        {"text": "slugify 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "14개 테스트"},
+        {"text": "truncate 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "10개 테스트"},
+        {"text": "parseQueryString 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "13개 테스트"},
+        {"text": "각 함수에 최소 1개의 happy path 테스트가 있다", "passed": true, "evidence": "다수의 happy path"},
+        {"text": "edge case 테스트가 3개를 초과하지 않는다", "passed": false, "evidence": "26개 이상의 edge case"},
+        {"text": "테스트 코드 전체가 100줄 이내이다", "passed": false, "evidence": "189줄"},
+        {"text": "불필요한 주석이 없거나 최소화되어 있다", "passed": false, "evidence": "구현 세부사항 주석 존재"}
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 199.1, "stddev": 53.5, "min": 155.6, "max": 279.5},
+      "tokens": {"mean": 14515, "stddev": 181, "min": 14305, "max": 14747}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.75, "stddev": 0.10, "min": 0.625, "max": 0.875},
+      "time_seconds": {"mean": 41.7, "stddev": 2.1, "min": 38.9, "max": 44.1},
+      "tokens": {"mean": 12916, "stddev": 348, "min": 12611, "max": 13424}
+    },
+    "delta": {
+      "pass_rate": "+0.25",
+      "time_seconds": "+157.4",
+      "tokens": "+1599"
+    }
+  },
+  "notes": [
+    "스킬 사용 시 pass rate 100% vs 스킬 미사용 시 75% — 간결성과 edge case 제한에서 차이 발생",
+    "스킬 사용 시 평균 199초 vs 미사용 42초 — 스킬 읽기 + 분석 단계로 인한 시간 증가",
+    "스킬 미사용 시 테스트 과다 작성 경향: eval-1에서 27개, eval-3에서 37개 (스킬 사용 시 각각 10개, 15개)",
+    "주석 관련 assertion은 스킬 유무에 관계없이 식별력 있음 — 스킬이 '주석 없이' 작성하도록 효과적으로 유도",
+    "한국어 테스트 설명은 with_skill에서만 나타남 (eval-2)"
+  ]
+}

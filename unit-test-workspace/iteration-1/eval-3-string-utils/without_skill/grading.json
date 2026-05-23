@@ -1,0 +1,13 @@
+{
+  "expectations": [
+    {"text": "string-utils.test.ts 파일이 생성되었다", "passed": true, "evidence": "string-utils.test.ts 파일이 outputs 디렉토리에 생성됨"},
+    {"text": "slugify 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('slugify') 블록에 14개 테스트"},
+    {"text": "truncate 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('truncate') 블록에 10개 테스트"},
+    {"text": "parseQueryString 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('parseQueryString') 블록에 13개 테스트"},
+    {"text": "각 함수에 최소 1개의 happy path 테스트가 있다", "passed": true, "evidence": "각 함수에 다수의 happy path 존재"},
+    {"text": "edge case 테스트가 3개를 초과하지 않는다", "passed": false, "evidence": "slugify에 10개+, truncate에 7개+, parseQueryString에 9개+ edge case. 총 26개 이상의 edge case로 과도함"},
+    {"text": "테스트 코드 전체가 100줄 이내이다", "passed": false, "evidence": "총 189줄로 100줄 초과"},
+    {"text": "불필요한 주석이 없거나 최소화되어 있다", "passed": false, "evidence": "line 169-172에 구현 세부사항 설명 주석 존재: '// \"key=a=b\" splits into...' 4줄짜리 주석"}
+  ],
+  "summary": {"passed": 5, "failed": 3, "total": 8, "pass_rate": 0.625}
+}

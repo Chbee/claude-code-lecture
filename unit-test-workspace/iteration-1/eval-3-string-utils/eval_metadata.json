@@ -1,0 +1,15 @@
+{
+  "eval_id": 3,
+  "eval_name": "string-utils-functions",
+  "prompt": "string-utils.ts의 함수들에 대해 테스트 좀 짜줘",
+  "assertions": [
+    "string-utils.test.ts 파일이 생성되었다",
+    "slugify 함수에 대한 테스트가 존재한다",
+    "truncate 함수에 대한 테스트가 존재한다",
+    "parseQueryString 함수에 대한 테스트가 존재한다",
+    "각 함수에 최소 1개의 happy path 테스트가 있다",
+    "edge case 테스트가 3개를 초과하지 않는다",
+    "테스트 코드 전체가 100줄 이내이다",
+    "불필요한 주석이 없거나 최소화되어 있다"
+  ]
+}

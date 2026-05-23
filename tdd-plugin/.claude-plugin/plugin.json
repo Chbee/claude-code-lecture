@@ -1,0 +1,5 @@
+{
+  "name": "tdd-guard",
+  "description": "TDD enforcement plugin: blocks source file edits without tests, and provides a unit-test-writer skill/agent",
+  "version": "1.0.0"
+}

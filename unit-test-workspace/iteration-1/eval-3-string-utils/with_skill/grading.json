@@ -1,0 +1,13 @@
+{
+  "expectations": [
+    {"text": "string-utils.test.ts 파일이 생성되었다", "passed": true, "evidence": "string-utils.test.ts 파일이 outputs 디렉토리에 생성됨"},
+    {"text": "slugify 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('slugify') 블록에 5개 테스트"},
+    {"text": "truncate 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('truncate') 블록에 4개 테스트"},
+    {"text": "parseQueryString 함수에 대한 테스트가 존재한다", "passed": true, "evidence": "describe('parseQueryString') 블록에 6개 테스트"},
+    {"text": "각 함수에 최소 1개의 happy path 테스트가 있다", "passed": true, "evidence": "slugify: 'Hello World' -> 'hello-world', truncate: 'short' within limit, parseQueryString: 'foo=bar&baz=qux'"},
+    {"text": "edge case 테스트가 3개를 초과하지 않는다", "passed": true, "evidence": "slugify edge: 빈 문자열(1), trim(1) = 2개. truncate edge: exact boundary(1) = 1개. parseQueryString edge: 빈 문자열(1), lone ?(1), missing value(1) = 3개. 전체적으로 적절"},
+    {"text": "테스트 코드 전체가 100줄 이내이다", "passed": true, "evidence": "총 80줄"},
+    {"text": "불필요한 주석이 없거나 최소화되어 있다", "passed": true, "evidence": "코드에 주석이 전혀 없음"}
+  ],
+  "summary": {"passed": 8, "failed": 0, "total": 8, "pass_rate": 1.0}
+}
