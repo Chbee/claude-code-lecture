@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오늘 뭐 먹지?</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, 'Segoe UI', sans-serif;
+      background: #FFF8F0;
+      min-height: 100vh;
+      padding: 32px 16px 48px;
+      color: #333;
+    }
+
+    .container { max-width: 520px; margin: 0 auto; }
+
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #444;
+      margin-bottom: 24px;
+    }
+
+    /* 카테고리 필터 */
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+    }
+
+    .card-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #aaa;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .checkboxes { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .cb-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 24px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: opacity 0.15s, filter 0.15s;
+      user-select: none;
+      border: 2px solid transparent;
+    }
+
+    .cb-label input { display: none; }
+    .cb-label[data-cat="한식"] { background: #FFD6E0; color: #b33; }
+    .cb-label[data-cat="일식"] { background: #FFEFB7; color: #885500; }
+    .cb-label[data-cat="양식"] { background: #C7F0DB; color: #256645; }
+    .cb-label[data-cat="중식"] { background: #C7DDFF; color: #334499; }
+    .cb-label.off { filter: grayscale(1); opacity: 0.4; }
+
+    #filter-hint {
+      display: none;
+      font-size: 0.82rem;
+      color: #e55;
+      margin-top: 10px;
+    }
+
+    /* 룰렛 */
+    .roulette-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    canvas {
+      border-radius: 50%;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.13);
+      display: block;
+    }
+
+    /* 돌리기 버튼 */
+    #spin-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      color: white;
+      font-size: 1.15rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 16px rgba(255,120,120,0.35);
+      letter-spacing: 0.04em;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    #spin-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 22px rgba(255,120,120,0.45);
+    }
+
+    #spin-btn:active:not(:disabled) { transform: scale(0.97); }
+
+    #spin-btn:disabled {
+      background: linear-gradient(135deg, #ddd, #e8e8e8);
+      color: #aaa;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    /* 결과 */
+    #result-area {
+      text-align: center;
+      transition: opacity 0.25s;
+    }
+
+    #result-name {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    #result-badge {
+      display: inline-block;
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #555;
+    }
+
+    /* 히스토리 */
+    #history-list { list-style: none; }
+
+    #history-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 0;
+      border-bottom: 1px solid #f5f5f5;
+      font-size: 0.9rem;
+    }
+
+    #history-list li:last-child { border-bottom: none; }
+
+    .h-name { flex: 1; font-weight: 500; }
+
+    .h-badge {
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #555;
+    }
+
+    .h-time { color: #c0c0c0; font-size: 0.8rem; min-width: 38px; text-align: right; }
+
+    .empty { text-align: center; color: #ccc; padding: 16px 0; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>오늘 뭐 먹지? 🍽️</h1>
+
+  <div class="card">
+    <div class="card-label">카테고리</div>
+    <div class="checkboxes">
+      <label class="cb-label" data-cat="한식"><input type="checkbox" class="cat-cb" value="한식" /> 한식</label>
+      <label class="cb-label" data-cat="일식"><input type="checkbox" class="cat-cb" value="일식" /> 일식</label>
+      <label class="cb-label" data-cat="양식"><input type="checkbox" class="cat-cb" value="양식" /> 양식</label>
+      <label class="cb-label" data-cat="중식"><input type="checkbox" class="cat-cb" value="중식" /> 중식</label>
+    </div>
+    <div id="filter-hint">카테고리를 하나 이상 선택해주세요</div>
+  </div>
+
+  <div class="roulette-wrap">
+    <canvas id="roulette" width="400" height="400">룰렛을 지원하지 않는 브라우저입니다.</canvas>
+  </div>
+
+  <button id="spin-btn" onclick="spinRoulette()">🎲 돌리기!</button>
+
+  <div class="card" id="result-area">
+    <div class="card-label">오늘의 메뉴</div>
+    <div id="result-name">?</div>
+    <span id="result-badge"></span>
+  </div>
+
+  <div class="card">
+    <div class="card-label">최근 기록</div>
+    <ul id="history-list"></ul>
+  </div>
+
+</div>
+<script>
+  const MENUS = {
+    한식: ['김치찌개','된장찌개','비빔밥','제육볶음','불고기','냉면','국밥','삼계탕'],
+    일식: ['초밥','라멘','돈카츠','우동','규동','오므라이스','카레'],
+    양식: ['파스타','피자','스테이크','리조또','햄버거','샐러드'],
+    중식: ['짜장면','짬뽕','탕수육','마라탕','마파두부','볶음밥'],
+  };
+
+  const SECTOR_COLORS = ['#FFD6E0','#FFEFB7','#C7F0DB','#C7DDFF','#E5D4FF','#FFD4A8'];
+  const CAT_COLORS    = { 한식:'#FFD6E0', 일식:'#FFEFB7', 양식:'#C7F0DB', 중식:'#C7DDFF' };
+
+  // ── localStorage helpers ──────────────────────────────────
+  function load(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+    catch { return fallback; }
+  }
+  function persist(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+  // ── State ─────────────────────────────────────────────────
+  let filter   = load('roulette_filter',  ['한식','일식','양식','중식']);
+  let history  = load('roulette_history', []);
+  let angle    = 0;   // cumulative rotation (radians)
+  let spinning = false;
+
+  // ── Canvas setup ──────────────────────────────────────────
+  const canvas = document.getElementById('roulette');
+  const ctx    = canvas.getContext('2d');
+  const CX = 200, CY = 200, R = 180;
+
+  // ── Candidates ───────────────────────────────────────────
+  function getCandidates() {
+    let pool = [];
+    filter.forEach(cat => (MENUS[cat] || []).forEach(name => pool.push({ name, cat })));
+    const recent = history.slice(-3).map(h => h.name);
+    const filtered = pool.filter(m => !recent.includes(m.name));
+    return filtered.length > 0 ? filtered : pool; // fallback if all excluded
+  }
+
+  // ── Draw ─────────────────────────────────────────────────
+  function draw() {
+    ctx.clearRect(0, 0, 400, 400);
+    const items = getCandidates();
+    const n = items.length;
+
+    if (n === 0) {
+      ctx.beginPath();
+      ctx.arc(CX, CY, R, 0, Math.PI * 2);
+      ctx.fillStyle = '#f2f2f2';
+      ctx.fill();
+      ctx.fillStyle = '#bbb';
+      ctx.font = '15px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('카테고리를 선택해주세요', CX, CY);
+      drawPointer();
+      return;
+    }
+
+    const sa = (Math.PI * 2) / n; // sector angle
+
+    ctx.save();
+    ctx.translate(CX, CY);
+    ctx.rotate(angle);
+
+    items.forEach((item, i) => {
+      const start = -Math.PI / 2 + i * sa;
+      const end   = start + sa;
+      const mid   = start + sa / 2;
+
+      // Sector
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, R, start, end);
+      ctx.closePath();
+      ctx.fillStyle = SECTOR_COLORS[i % SECTOR_COLORS.length];
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Text — rotated so result sector reads horizontally at 12 o'clock
+      const tr = R * 0.63;
+      ctx.save();
+      ctx.translate(Math.cos(mid) * tr, Math.sin(mid) * tr);
+      ctx.rotate(mid + Math.PI / 2);
+      const fs = item.name.length >= 5 ? 11 : 14;
+      ctx.font = `bold ${fs}px -apple-system, sans-serif`;
+      ctx.fillStyle = 'rgba(0,0,0,0.6)';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(item.name, 0, 0);
+      ctx.restore();
+    });
+
+    // Center cap
+    ctx.beginPath();
+    ctx.arc(0, 0, 16, 0, Math.PI * 2);
+    ctx.fillStyle = 'white';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.restore();
+
+    // Outer ring
+    ctx.beginPath();
+    ctx.arc(CX, CY, R, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(0,0,0,0.07)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    drawPointer();
+  }
+
+  function drawPointer() {
+    // Fixed triangle at 12 o'clock pointing down to the rim
+    const px = CX, py = CY - R;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(px,      py + 10); // tip
+    ctx.lineTo(px - 10, py - 14); // left
+    ctx.lineTo(px + 10, py - 14); // right
+    ctx.closePath();
+    ctx.fillStyle = '#ff6b6b';
+    ctx.shadowColor = 'rgba(255,80,80,0.4)';
+    ctx.shadowBlur = 8;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Spin ─────────────────────────────────────────────────
+  function spinRoulette() {
+    if (spinning) return;
+    const items = getCandidates();
+    if (items.length === 0) return;
+
+    spinning = true;
+    setUI(false);
+
+    const n  = items.length;
+    const sa = (Math.PI * 2) / n;
+    const ti = Math.floor(Math.random() * n); // target index
+
+    // finalAngle (mod 2π) = -targetMid so sector ti lands at 12 o'clock
+    const targetMid  = (ti + 0.5) * sa;
+    const curNorm    = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+    const targetNorm = ((-targetMid) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+    let   delta      = targetNorm - curNorm;
+    if (delta <= 0) delta += Math.PI * 2;
+
+    const extra      = (3 + Math.floor(Math.random() * 3)) * Math.PI * 2;
+    const finalAngle = angle + delta + extra;
+    const startAngle = angle;
+    const duration   = 3500 + Math.random() * 1000;
+    const t0         = performance.now();
+
+    (function animate(now) {
+      const t      = Math.min((now - t0) / duration, 1);
+      const eased  = 1 - Math.pow(1 - t, 4); // easeOutQuart
+      angle        = startAngle + (finalAngle - startAngle) * eased;
+      draw();
+
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        angle = finalAngle;
+        draw();
+        spinning = false;
+        setUI(true);
+        showResult(items[ti]);
+        addHistory(items[ti]);
+      }
+    })(t0);
+  }
+
+  // ── Result & History ──────────────────────────────────────
+  function showResult(item) {
+    document.getElementById('result-name').textContent = item.name;
+    const b = document.getElementById('result-badge');
+    b.textContent = item.cat;
+    b.style.background = CAT_COLORS[item.cat] || '#E5D4FF';
+  }
+
+  function addHistory(item) {
+    const now  = new Date();
+    const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    history.push({ name: item.name, cat: item.cat, time });
+    if (history.length > 10) history.shift();
+    persist('roulette_history', history);
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('history-list');
+    if (!history.length) {
+      list.innerHTML = '<li class="empty">아직 기록이 없어요</li>';
+      return;
+    }
+    list.innerHTML = [...history].reverse().map(h => `
+      <li>
+        <span class="h-name">${h.name}</span>
+        <span class="h-badge" style="background:${CAT_COLORS[h.cat]||'#E5D4FF'}">${h.cat}</span>
+        <span class="h-time">${h.time}</span>
+      </li>`).join('');
+  }
+
+  // ── Filter ────────────────────────────────────────────────
+  function updateFilter() {
+    filter = [];
+    document.querySelectorAll('.cat-cb:checked').forEach(cb => filter.push(cb.value));
+    document.querySelectorAll('.cb-label').forEach(lbl => {
+      lbl.classList.toggle('off', !lbl.querySelector('input').checked);
+    });
+    persist('roulette_filter', filter);
+
+    const empty = filter.length === 0;
+    document.getElementById('spin-btn').disabled = empty;
+    document.getElementById('filter-hint').style.display = empty ? 'block' : 'none';
+    draw();
+  }
+
+  function setUI(enabled) {
+    document.querySelectorAll('.cat-cb').forEach(cb => cb.disabled = !enabled);
+    document.getElementById('spin-btn').disabled = !enabled;
+    document.getElementById('result-area').style.opacity = enabled ? '1' : '0.35';
+  }
+
+  // ── Init ─────────────────────────────────────────────────
+  document.querySelectorAll('.cat-cb').forEach(cb => {
+    cb.checked = filter.includes(cb.value);
+    cb.addEventListener('change', updateFilter);
+  });
+
+  document.querySelectorAll('.cb-label').forEach(lbl =>
+    lbl.classList.toggle('off', !lbl.querySelector('input').checked));
+
+  if (history.length) showResult(history[history.length - 1]);
+  renderHistory();
+  draw();
+</script>
+</body>
+</html>
