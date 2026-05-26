@@ -1,0 +1,8 @@
+{
+  "name": "meal-roulette",
+  "version": "1.0.0",
+  "description": "오늘 뭐 먹지? 랜덤 식단 룰렛",
+  "devDependencies": {
+    "code-review-plugin": "file:./plugins/code-review-plugin"
+  }
+}

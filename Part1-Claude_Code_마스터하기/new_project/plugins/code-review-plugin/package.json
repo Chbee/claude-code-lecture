@@ -1,0 +1,22 @@
+{
+  "name": "code-review-plugin",
+  "version": "1.0.0",
+  "description": "Claude Code plugin — 코드 리뷰 스킬, 서브 에이전트, pre-commit 훅을 제공합니다.",
+  "claude": {
+    "commands": "./commands",
+    "agents": "./agents",
+    "hooks": {
+      "PreToolUse": [
+        {
+          "matcher": "Bash",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "bash ./node_modules/code-review-plugin/hooks/pre-commit.sh"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
