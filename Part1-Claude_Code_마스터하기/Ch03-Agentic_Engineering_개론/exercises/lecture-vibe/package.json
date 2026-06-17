@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:restart": "bash scripts/dev-restart.sh",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "check": "tsc --noEmit && eslint src/",
+    "info": "bash scripts/check-env.sh"
   },
   "dependencies": {
     "next": "16.2.9",
